@@ -1,10 +1,11 @@
 import * as firebase from "firebase"
-import { apiKey, authDomain, databaseURL} from '../../config'
+import { apiKey, authDomain, databaseURL, storageBucket } from '../../config'
 
 const firebaseConfig = {
   apiKey,
   authDomain,
-  databaseURL
+  databaseURL,
+  storageBucket
 };
 
 export const firebaseRef = firebase.initializeApp(firebaseConfig);

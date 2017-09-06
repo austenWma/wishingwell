@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableHighlight, Image } from 'react-native'
+import { View, Text, StyleSheet, TouchableHighlight, Image, Button } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import NavigationBar from 'react-native-navbar'
@@ -51,6 +51,7 @@ class Profile extends Component {
           </Text>
           <Text><Icon name='email-outline' size={25} style={styles.icon}/> {this.props.email}</Text>
           <Text><Icon name='information-outline' size={25} style={styles.icon}/> {this.props.bio}</Text>
+          <Button title="Invest" onPress={() => {}}>Invest</Button>
         </View>
       </View>
     )
@@ -68,10 +69,10 @@ const styles = StyleSheet.create({
   },
   body: {
   },
-  image: { 
+  image: {
     top: 28,
-    height: 100, 
-    borderRadius: 50, 
+    height: 100,
+    borderRadius: 50,
     width: 100,
     backgroundColor: '#C0C0C0',
   },

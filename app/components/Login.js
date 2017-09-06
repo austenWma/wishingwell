@@ -17,6 +17,7 @@ import { connect } from 'react-redux'
 import { setUserInfo } from '../Actions/Profile/ProfileAction'
 import { setBitcoinValue } from '../Actions/Bitcoin/BitcoinAction'
 import axios from 'axios'
+import { HOST_IP } from '../../config.js'
 
 class Login extends Component {
   constructor(props) {
@@ -40,17 +41,16 @@ class Login extends Component {
           uid: uid,
         })
 
-        // axios.get('http://localhost:4000/api/getBitcoinValue')
-        // .then(({ data }) => {
-        //   this.props.setBitcoinValue(data)
-        //   Actions.Home()
-        // })
-        // for (let i = 0; i < 100; i ++) {
-        //     this.setState({
-        //       progress: this.state.progress + 0.1
-        //     })
-        // }
-        Actions.Home()
+        axios.get('http://HOST_IP:4000/api/getBitcoinValue')
+        .then(({ data }) => {
+          this.props.setBitcoinValue(data)
+          Actions.Home()
+        })
+        for (let i = 0; i < 100; i ++) {
+            this.setState({
+              progress: this.state.progress + 0.1
+            })
+        }
       }
     })
     .catch((err) => {

@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import ConfirmModal from './ConfirmModal.js'
 import { setUserInfo } from '../../Actions/Profile/ProfileAction.js'
+import { HOST_IP } from '../../../config.js'
 
 
 const db = firebase.database()
@@ -69,7 +70,7 @@ class DonationWell extends Component {
           cardID: this.props.cardID,
           amount: Number(this.state.amount),
         }
-        axios.post('http://localhost:4000/api/makeDonation', chargeObj)
+        axios.post('http://HOST_IP:4000/api/makeDonation', chargeObj)
         .then(data => {
           alert('POST MADE')
           console.log(data)
@@ -91,7 +92,7 @@ class DonationWell extends Component {
             //   uid: this.props.uid,
             // }
 
-            // axios.post('http://localhost:4000/api/buyCrypto', buyObj)
+            // axios.post('http://HOST_IP:4000/api/buyCrypto', buyObj)
           })
         })
       } else {

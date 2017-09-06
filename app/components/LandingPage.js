@@ -17,6 +17,7 @@ import { setUserInfo } from '../Actions/Profile/ProfileAction'
 import { setUserPhoto } from '../Actions/Profile/PhotoAction'
 import { setBitcoinValue } from '../Actions/Bitcoin/BitcoinAction'
 import axios from 'axios'
+import { HOST_IP } from '../../config.js'
 
 const mapStateToProps = (state) => {
   return {
@@ -61,7 +62,7 @@ class LandingPage extends Component {
       this.props.setUserPhoto(photo)
     })
 
-    axios.get('http://localhost:4000/api/getBitcoinValue')
+    axios.get('http://HOST_IP:80/api/getBitcoinValue')
     .then(({ data }) => {
       this.props.setBitcoinValue(data)
     })

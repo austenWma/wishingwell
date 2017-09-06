@@ -13,7 +13,8 @@ const mapStateToProps = (state) => {
     lastname: state.ProfileReducer.lastname,
     email: state.ProfileReducer.email,
     photo: state.PhotoReducer.photo,
-    bio: state.ProfileReducer.bio
+    bio: state.ProfileReducer.bio,
+    logs: state.SavingsReducer.entries
   }
 }
 
@@ -25,60 +26,71 @@ const rightButtonConfig = {
   tintColor: 'black'
 }
 
-const leftButtonConfig = {
-  title: 'Add Card',
-  handler() {
-    Actions.AddCard()
-  },
-  tintColor: 'black'
-}
-
 class Profile extends Component {
+  constructor(props) {
+    super(props)
+
+    this.getTotal = this.getTotal.bind(this)
+  }
+
+  getTotal() {
+    let total = 0;
+    for(let i = 0; i < this.props.logs.length; i++) {
+      total += Number(this.props.logs[i]['amount'])
+    }
+    return total
+  }
 
   render() {
     return (
       <View style={styles.body}>
           <View>
-            <NavigationBar title={{title:'Profile'}} rightButton={rightButtonConfig} tintColor='#99ccff' leftButton={leftButtonConfig}/>
+            <NavigationBar statusBar={false} title={{title:'Profile'}} rightButton={rightButtonConfig} tintColor='#99ccff'/>
           </View>
-        <View style={styles.text}>
-          <Text style={styles.name}>
+
+          <View style={styles.text}>
             <Image source={{ uri: this.props.photo }} style={styles.image}/>
-            {this.props.firstname} {this.props.lastname}
-          </Text>
-          <Text>
-            <Icon name='account-circle' size={25} style={styles.icon}/> {this.props.username? <Text style={styles.username}>@{this.props.username}</Text> : null}
-          </Text>
-          <Text><Icon name='email-outline' size={25} style={styles.icon}/> {this.props.email}</Text>
-          <Text><Icon name='information-outline' size={25} style={styles.icon}/> {this.props.bio}</Text>
+            <Text style={styles.name}>
+              {this.props.firstname} {this.props.lastname}
+            </Text>
+            <Text>
+              <Icon name='at' size={25} style={styles.icon}/> {this.props.username}
+            </Text>
+          <View>
+          </View>
+            <Text style={styles.email}><Icon name='email-outline' size={25} style={styles.icon}/> {this.props.email}</Text>
+            <Text style={styles.total}><Icon name='currency-usd' size={25} style={styles.icon}/> {this.getTotal()}</Text>
+            <Text style={styles.bio}><Icon name='information-outline' size={25} style={styles.icon}/> {this.props.bio}</Text>
+
         </View>
+
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-
-  text: {
-    top: 30,
-  },
   body: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  body: {
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   image: { 
-    top: 28,
-    height: 100, 
-    borderRadius: 50, 
-    width: 100,
+    marginLeft: 60,
+    top: 10,
+    height: 250, 
+    width: 250,
+    borderRadius: 125, 
     backgroundColor: '#C0C0C0',
   },
   name: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 20,   
     fontSize: 30,
     fontWeight: 'bold',
     marginLeft: 15,
+    top: 20
   },
   username: {
     marginLeft: 15
@@ -88,5 +100,9 @@ const styles = StyleSheet.create({
   }
 })
 
-
 export default connect(mapStateToProps)(Profile)
+
+
+
+
+

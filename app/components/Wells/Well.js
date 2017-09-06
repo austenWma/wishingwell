@@ -47,6 +47,7 @@ class Well extends Component {
 
       ref.push({
         date: new Date().toDateString(),
+        time: new Date().getTime(),              
         amount: this.state.amount,
         description: this.state.description
       })

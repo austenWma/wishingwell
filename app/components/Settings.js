@@ -10,7 +10,7 @@ import * as firebase from 'firebase'
 import { amazonKey, amazonSecret } from '../../config'
 import ImagePicker from 'react-native-image-picker'
 import RNFetchBlob from 'react-native-fetch-blob'
-
+import * as Progress from 'react-native-progress'
 
 const storage = firebase.storage()
 const Blob = RNFetchBlob.polyfill.Blob
@@ -41,7 +41,9 @@ class Settings extends Component {
     super(props)
     this.state={
       photo: null,
-      formData: {}
+      formData: {},
+      uploading: false,
+      progress: 0
     }
 
     this.handleOnSave = this.handleOnSave.bind(this)
@@ -96,6 +98,10 @@ class Settings extends Component {
                 task.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
                   var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                   if (progress <= 100) {
+                    this.setState({
+                      uploading: true,
+                      progress
+                    })
                     console.log('Upload is ' + progress + '% done');
                   }
                 }, (err) => {
@@ -103,6 +109,9 @@ class Settings extends Component {
                 }, 
                 () => {
                   this.props.setUserPhoto(task.snapshot.downloadURL)
+                  this.setState({
+                      uploading: false
+                  })
                 })
               })
           })
@@ -114,7 +123,7 @@ class Settings extends Component {
 
   render() {
     let { photo } = this.state;
-    return (
+    return this.state.uploading ? (<Progress.Pie size={50} />) : (
       <View>
        <View style={styles.body}>
           <Image source={{ uri: photo || this.props.photo }} onPress={this._pickImage} style={styles.image} />

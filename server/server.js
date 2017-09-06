@@ -6,7 +6,7 @@ const dotenv = require('dotenv').config();
 const router = require('./routes/router.js');
 
 let app = express();
-let PORT = process.env.PORT || 80;
+let PORT = process.env.PORT || 4000;
 
 app.use(parser.urlencoded({ extended: true }))
 app.use(parser.json())

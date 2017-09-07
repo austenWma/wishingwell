@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import ConfirmModal from './ConfirmModal.js'
 import { setUserInfo } from '../../Actions/Profile/ProfileAction.js'
+import { HOST_IP } from '../../../config.js'
 
 const db = firebase.database()
 
@@ -39,10 +40,6 @@ class Well extends Component {
         paymentReady: false,
       })
 
-      this.setState({
-        coinSpeed: 2
-      });
-
       const ref = db.ref(`users/${this.props.uid}/logs`)
 
       ref.push({
@@ -61,7 +58,7 @@ class Well extends Component {
           cardID: this.props.cardID,
           amount: Number(this.state.amount),
         }
-        axios.post('http://localhost:4000/api/makeSavings', chargeObj)
+        axios.post('http://HOST_IP:4000/api/makeSavings', chargeObj)
         .then(data => {
           console.log(data)
 
@@ -84,7 +81,7 @@ class Well extends Component {
           //   uid: this.props.uid,
           // }
 
-          // axios.post('http://localhost:4000/api/buyCrypto', buyObj)
+          // axios.post('http://HOST_IP:4000/api/buyCrypto', buyObj)
         })
       } else {
         this.setTimeout(

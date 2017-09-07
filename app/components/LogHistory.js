@@ -20,6 +20,7 @@ class LogHistory extends Component {
     };
     this.getTotal = this.getTotal.bind(this)
   }
+
   componentWillMount(){
     db.ref(`users/${this.props.uid}/logs`).on('value', (snapshot) => {
       (snapshot.val()) ? this.props.setSavings(Object.values(snapshot.val())) : null;
@@ -32,6 +33,7 @@ class LogHistory extends Component {
     }
     return total
   }
+
   _onRefresh() {
     this.setState({refreshing: true});
     db.ref(`users/${this.props.uid}/logs`).on('value', (snapshot) => {
@@ -39,6 +41,7 @@ class LogHistory extends Component {
     })
     this.setState({refreshing: false});
   }
+
   render() {
     return (
       <View>
@@ -63,6 +66,7 @@ class LogHistory extends Component {
                       <Text style={styles.description}>{item.description}</Text>
                       <Text style={styles.time}>{moment(item.time).fromNow()}</Text>
                     </View>
+
                     <Text style={styles.date}>{item.date}</Text>
                     <Text style={styles.amount}>${item.amount}</Text>
                   </View>

@@ -8,6 +8,7 @@ import axios from 'axios'
 import ConfirmModal from './ConfirmModal.js'
 import { setUserInfo } from '../../Actions/Profile/ProfileAction.js'
 import { HOST_IP } from '../../../config.js'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const db = firebase.database()
 
@@ -39,6 +40,7 @@ class Well extends Component {
 
       ref.push({
         date: new Date().toDateString(),
+        time: new Date().getTime(),              
         amount: this.state.amount,
         description: this.state.description
       })
@@ -94,6 +96,7 @@ class Well extends Component {
 
     return (
       <View>
+        <KeyboardAwareScrollView>
         <View>
           <NavigationBar title={{title:'Wishing Well'}} tintColor='#99ccff'/>
         </View>
@@ -101,7 +104,7 @@ class Well extends Component {
           <View style={{height: "20%"}}>
             <Text style={styles.credentials}>Input Amount</Text>
           </View>
-          <TextInput style={styles.amountInputField} placeholder="Amount Here" placeholderTextColor={'#A8A8A8'} multiline={true} onChangeText={(text) => this.setState({amount: Number(text)})} value={String(this.state.amount)}/>
+          <TextInput style={styles.amountInputField} placeholder="Amount here" placeholderTextColor={'#A8A8A8'} multiline={true} onChangeText={(text) => this.setState({amount: Number(text)})} value={String(this.state.amount)}/>
           <View style={{height: "20%"}}>
             <Text style={styles.credentials}>Description</Text>
           </View>
@@ -110,6 +113,7 @@ class Well extends Component {
             <ConfirmModal amount={this.state.amount} description={this.state.description}/>
           </View>
         </View>
+        </KeyboardAwareScrollView>
         <GestureRecognizer
           onSwipeUp={(state) => this.onSwipeUp(state)}
           style={styles.coin}
@@ -124,13 +128,13 @@ class Well extends Component {
 const styles = StyleSheet.create({
   coin: {
     top: '6%',
-    height: '75%',
+    height: '55%',
     width: '100%',
   },
   inputFields: {
     marginTop: '2%',
     marginLeft: '25%',
-    height: '20%',
+    height: '25%',
     width: '50%',
     borderColor: 'gray',
     alignItems: 'center',
@@ -147,21 +151,23 @@ const styles = StyleSheet.create({
   },
   amountInputField: {
     width: '100%',
-    height: '21%',
-    borderColor: 'gray',
-    borderColor: 'gray',
-    borderWidth: 1,
-    textAlign: 'center',
-    fontSize: 15,
-  },
-  descriptionInputField: {
-    width: '100%',
     height: '40%',
     borderColor: 'gray',
     borderColor: 'gray',
     borderWidth: 1,
     textAlign: 'center',
     fontSize: 15,
+    marginTop: 20,
+  },
+  descriptionInputField: {
+    width: '100%',
+    height: '70%',
+    borderColor: 'gray',
+    borderColor: 'gray',
+    borderWidth: 1,
+    textAlign: 'center',
+    fontSize: 15,
+    marginTop: 20
   },
 })
 

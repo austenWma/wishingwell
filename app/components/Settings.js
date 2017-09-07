@@ -14,7 +14,6 @@ import * as Progress from 'react-native-progress'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Actions } from 'react-native-router-flux'
 
-
 const storage = firebase.storage()
 const Blob = RNFetchBlob.polyfill.Blob
 const fs = RNFetchBlob.fs 
@@ -80,7 +79,7 @@ class Settings extends Component {
       Actions.Login()
     })
   }
-  
+
   _pickImage() {
     ImagePicker.showImagePicker(null, (res) => {
       if (!res.didCancel) {
@@ -172,6 +171,7 @@ class Settings extends Component {
           iconRight={<Icon name='chevron-right' size={30} style={styles.icon}/>}
         />
         </Form>
+
         <Button
           title="Save Changes"
           onPress={() => this.handleOnSave()}

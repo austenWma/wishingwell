@@ -25,8 +25,10 @@ const rightButtonConfig = {
 class Profile extends Component {
   constructor(props) {
     super(props)
+
     this.getTotal = this.getTotal.bind(this)
   }
+
   getTotal() {
     let total = 0;
     for(let i = 0; i < this.props.logs.length; i++) {
@@ -56,6 +58,7 @@ class Profile extends Component {
             <Text style={styles.about}><Icon name='information-outline' size={25} style={styles.icon}/> A B O U T  M E</Text>
             <Text style={styles.bio}>{this.props.bio}</Text>
         </View>
+
       </View>
     )
   }
@@ -102,4 +105,6 @@ const styles = StyleSheet.create({
     
   }
 })
+
 export default connect(mapStateToProps)(Profile)
+

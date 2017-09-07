@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Button, Image, TextInput,  ImagePickerIOS} from 'react-native';
 import { Form, Separator, InputField, LinkField, SwitchField, PickerField} from 'react-native-form-generator';
 import { connect } from 'react-redux';
 import { setUserInfo } from '../Actions/Profile/ProfileAction'
@@ -69,7 +69,7 @@ class Settings extends Component {
       })
     } else {
       this.props.setUserPhoto(this.state.photo)
-    }
+    } 
     firebase.database().ref(`users/${this.props.uid}`).update({
       username: this.state.formData.username || this.props.username,
       firstname: this.state.formData.firstname || this.props.firstname,
@@ -79,6 +79,40 @@ class Settings extends Component {
       photo: this.state.photo || this.props.photo
     })
   }
+  
+  signOut() {
+    firebase.auth().signOut().then(() => {
+      Actions.Login()
+    })
+  }
+
+  handleOnChoose(){
+    ImagePicker.showImagePicker(null, (response) => {
+      console.log('HIHIHIHI')
+      console.log('Response = ', response);
+    
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let source = { uri: response.uri };
+    
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+    
+        this.setState({
+          photo: source
+        });
+      }
+    });
+  }
+  
 
   _pickImage() {
     ImagePicker.showImagePicker(null, (res) => {
@@ -122,10 +156,11 @@ class Settings extends Component {
       <KeyboardAwareScrollView>
       <View>
        <View style={styles.body}>
-          <Image source={{ uri: photo || this.props.photo }} onPress={this._pickImage} style={styles.image} />
+          <Image source={{ uri: photo || this.props.photo }} onPress={this.handleOnChoose} style={styles.image} />
         <Button
             title="Change Profile Photo"
-            onPress={this._pickImage}
+            onPress={this.handleOnChoose}
+            style={styles.button}
         />
         </View>
         <Separator label="Personal Information"/>

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { setUserInfo } from '../../Actions/Profile/ProfileAction.js';
 import { Switch } from 'react-native-switch';
 import { CreditCardInput } from "react-native-credit-card-input";
+import { HOST_IP } from '../../../config'
 
 const db = firebase.database()
 
@@ -44,7 +45,7 @@ class AddCard extends Component {
          exp_month: +this.state.formData.values.expiry.slice(0,2),
          exp_year: +this.state.formData.values.expiry.slice(3)
        }
-       axios.post('http://localhost:4000/api/addACard', cardInfo)
+       axios.post(`http://${HOST_IP}:4000/api/addACard`, cardInfo)
        .then(({ data }) => {
          db.ref('users/' + this.props.uid).update({
            cardID: data
@@ -59,7 +60,7 @@ class AddCard extends Component {
          db.ref('users/' + userUID).once('value')
          .then(data => {
            if (!data.val().wallet) {
-             axios.post('http://localhost:4000/api/addAWallet', {UID: userUID})
+             axios.post(`http://${HOST_IP}:4000/api/addAWallet`, {UID: userUID})
              .then(({ data }) => {
                db.ref('users/' + userUID).update({
                  wallet: data,
@@ -84,7 +85,7 @@ class AddCard extends Component {
  //   db.ref('users/' + userUID).once('value')
  //   .then(data => {
  //     if (!data.val().wallet) {
- //       axios.post('http://localhost:4000/api/addAWallet', {UID: userUID})
+ //       axios.post(`http://${HOST_IP}:4000/api/addAWallet`, {UID: userUID})
  //       .then(({ data }) => {
  //         db.ref('users/' + userUID).update({
  //           wallet: data,

@@ -41,7 +41,7 @@ class Login extends Component {
           uid: uid,
         })
 
-        axios.get('http://HOST_IP:4000/api/getBitcoinValue')
+        axios.get(`http://${HOST_IP}:4000/api/getBitcoinValue`)
         .then(({ data }) => {
           this.props.setBitcoinValue(data)
           Actions.Home()

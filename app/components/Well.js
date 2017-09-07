@@ -48,7 +48,7 @@ class Well extends Component {
         cardID: this.props.cardID,
         amount: this.state.amount,
       }
-      axios.post('http://HOST_IP:4000/api/makeSavings', chargeObj)
+      axios.post(`http://${HOST_IP}:4000/api/makeSavings`, chargeObj)
       .then(data => {
         console.log(data)
         this.setTimeout(
@@ -60,7 +60,7 @@ class Well extends Component {
           uid: this.props.uid,
         }
 
-        // axios.post('http://HOST_IP:4000/api/buyCrypto', buyObj)
+        // axios.post(`http://${HOST_IP}:4000/api/buyCrypto`, buyObj)
       })
     } else {
       this.setTimeout(

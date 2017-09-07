@@ -19,7 +19,6 @@ import { setBitcoinValue } from '../Actions/Bitcoin/BitcoinAction'
 import axios from 'axios'
 import { VictoryLine, VictoryChart, VictoryTheme } from "victory-native"
 import { HOST_IP } from '../../config.js'
-import { VictoryLine, VictoryChart, VictoryTheme } from "victory-native"
 
 const mapStateToProps = (state) => {
   return {
@@ -66,7 +65,7 @@ class LandingPage extends Component {
       this.props.setUserPhoto(photo)
     })
 
-    axios.get('http://HOST_IP:80/api/getBitcoinValue')
+    axios.get(`http://${HOST_IP}:80/api/getBitcoinValue`)
     .then(({ data }) => {
       this.props.setBitcoinValue(data)
     })

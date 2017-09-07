@@ -44,48 +44,71 @@ class Profile extends Component {
         <View style={styles.text}>
           <Text style={styles.name}>
             <Image source={{ uri: this.props.photo }} style={styles.image}/>
-            {this.props.firstname} {this.props.lastname}
           </Text>
-          <Text>
+          {/* <Text>
             <Icon name='account-circle' size={25} style={styles.icon}/> {this.props.username? <Text style={styles.username}>@{this.props.username}</Text> : null}
           </Text>
           <Text><Icon name='email-outline' size={25} style={styles.icon}/> {this.props.email}</Text>
-          <Text><Icon name='information-outline' size={25} style={styles.icon}/> {this.props.bio}</Text>
-          <Button title="Invest" onPress={() => {}}>Invest</Button>
+          <Text><Icon name='information-outline' size={25} style={styles.icon}/> {this.props.bio}</Text> */}
+            <View style={styles.namewrap}>
+              <Text style={styles.name}>
+                {this.props.firstname} {this.props.lastname}
+              </Text>
+            </View>
+          <View style={styles.info}>
+            <Text><Icon name='at' size={25} style={styles.icon}/> {this.props.username}</Text>
+            <Text style={styles.email}><Icon name='email-outline' size={25} style={styles.icon}/> {this.props.email}</Text>
+            <Text style={styles.total}><Icon name='currency-usd' size={25} style={styles.icon}/>total</Text>
+          </View>
+            <Text style={styles.about}><Icon name='information-outline' size={25} style={styles.icon}/> A B O U T  M E</Text>
+            <Text style={styles.bio}>{this.props.bio}</Text>
         </View>
+          <Button title="Invest" onPress={() => {}}>Invest</Button>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-
-  text: {
-    top: 30,
+  about: {
+    paddingTop: 15,
+    marginLeft: 10,
+    fontSize: 20
   },
-  body: {
+  bio:{
+    marginTop: 10,
+    marginLeft: 15
+  },
+  image: { 
+    marginLeft: 80,
+    top: 10,
+    height: 200, 
+    width: 200,
+    borderRadius: 100, 
+    backgroundColor: '#C0C0C0',
+  },
+  namewrap: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  body: {
-  },
-  image: {
-    top: 28,
-    height: 100,
-    borderRadius: 50,
-    width: 100,
-    backgroundColor: '#C0C0C0',
-  },
   name: {
+    paddingBottom: 20,   
     fontSize: 30,
     fontWeight: 'bold',
-    marginLeft: 15,
-  },
-  username: {
-    marginLeft: 15
+    top: 20,
+    fontFamily: 'Roboto-Light'
   },
   icon:{
     marginLeft: 30
+  },
+  info:{
+    fontFamily: 'Roboto-Light',    
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 10,
+    borderBottomWidth: 0.5,
+    fontFamily: 'Roboto-Light'
+    
   }
 })
 

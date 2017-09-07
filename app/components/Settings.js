@@ -11,6 +11,8 @@ import { amazonKey, amazonSecret } from '../../config'
 import ImagePicker from 'react-native-image-picker'
 import RNFetchBlob from 'react-native-fetch-blob'
 import * as Progress from 'react-native-progress'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Actions } from 'react-native-router-flux'
 
 const storage = firebase.storage()
 const Blob = RNFetchBlob.polyfill.Blob
@@ -117,6 +119,7 @@ class Settings extends Component {
   render() {
     let { photo } = this.state;
     return this.state.uploading ? (<Progress.Pie size={50} />) : (
+      <KeyboardAwareScrollView>
       <View>
        <View style={styles.body}>
           <Image source={{ uri: photo || this.props.photo }} onPress={this._pickImage} style={styles.image} />
@@ -124,7 +127,7 @@ class Settings extends Component {
             title="Change Profile Photo"
             onPress={this._pickImage}
         />
-       </View>
+        </View>
         <Separator label="Personal Information"/>
        <Form
           style={styles.form}
@@ -162,17 +165,31 @@ class Settings extends Component {
         <InputField
             ref='bio'
             iconLeft={<Icon name='information-outline' size={30} style={styles.icon}/>}
-            placeholder='Bio'
+            placeholder='Add a bio to your profile'
             value={this.props.bio}
           />
         <Separator label="Private Information"/>
+        <LinkField 
+          iconLeft={<Text style={styles.cardtext}>Add Credit Card</Text>}
+          onPress={()=>Actions.AddCard()}
+          iconRight={<Icon name='chevron-right' size={30} style={styles.icon}/>}
+        />
         </Form>
+
         <Button
-          title="Done"
+          title="Save Changes"
           onPress={() => this.handleOnSave()}
+          style={styles.button}
+        ></Button>
+        <Button
+          title="Sign Out"
+          onPress={() => this.signOut()}
+          style={styles.button}
         ></Button>
 
       </View>
+        </KeyboardAwareScrollView>
+
     );
   }
 };
@@ -192,8 +209,16 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginTop: 7,
-    marginLeft: 4,
+    marginLeft: 10,
     color:'gray'
+  },
+  button:{
+    marginTop: 15
+  },
+  cardtext: {
+    fontSize: 18,
+    marginTop: 10,
+    marginLeft: 10
   }
 });
 

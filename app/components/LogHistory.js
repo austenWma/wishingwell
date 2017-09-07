@@ -55,12 +55,27 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: 'black',
     width: '100%',
-    height: 70
+    height: 80,
+    fontFamily: 'Roboto-Light'    
   },
   description: {
     fontSize: 20,
     top: 5,
-    marginLeft: 7
+    marginLeft: 10,
+    fontFamily: 'Roboto-Light'
+  },
+  amount: {
+    fontFamily: 'Roboto-Light'    
+  },
+  time: {
+    marginRight: 10,
+    color: 'gray',
+    top: 10,    
+  },
+  firstline: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%'
   },
   amount: {
     textAlign: 'right',
@@ -76,8 +91,24 @@ const styles = StyleSheet.create({
     color: 'gray'
   },
   log : {
-    marginBottom: '17%'
-  }
+    marginBottom: '55%'
+  },
+  total: {
+    height: 40,
+    borderBottomWidth: 0.5,
+    borderColor: 'gray',
+  }, 
+  savings: {
+    fontSize: 25,
+    marginLeft: 7,
+    fontFamily: ''
+    
+  },
+  number: {
+    fontSize: 25,
+    textAlign: 'right',
+    marginRight: 10    
+  },
 })
 
 export default connect(mapStateToProps, { setSavings })(LogHistory)

@@ -27,19 +27,14 @@ class Well extends Component {
     super(props);
     this.state = {
       amount: '',
-      description: '',
-      coinSpeed: 20,
+      description: ''
     }
     this.onSwipeUp = this.onSwipeUp.bind(this);
   }
 
   onSwipeUp(gestureState) {
+    console.log(this.props.paymentReady)
     if (this.props.paymentReady) {
-
-      this.props.setUserInfo({
-        paymentReady: false,
-      })
-
       const ref = db.ref(`users/${this.props.uid}/logs`)
 
       ref.push({
@@ -72,10 +67,11 @@ class Well extends Component {
             total: this.props.total + chargeObj.amount
           })
 
-          this.setTimeout(
-            () => { alert('Savings Added') },
-            500
-          );
+          
+          alert('Savings Added')
+          this.props.setUserInfo({
+              paymentReady: false,
+          })
           // let buyObj = {
           //   walletAddress: this.props.qr,
           //   uid: this.props.uid,
@@ -84,10 +80,10 @@ class Well extends Component {
           // axios.post(`http://${HOST_IP}:4000/api/buyCrypto`, buyObj)
         })
       } else {
-        this.setTimeout(
-          () => { alert('Savings Logged') },
-          500
-        );
+        alert('Savings Logged') 
+        this.props.setUserInfo({
+              paymentReady: false,
+          })
       }
     } else {
       alert('Please confirm savings details')
@@ -95,11 +91,6 @@ class Well extends Component {
   }
 
   render() {
-
-    const config = {
-      velocityThreshold: 0.3,
-      directionalOffsetThreshold: 80
-    };
 
     return (
       <View>
@@ -121,7 +112,6 @@ class Well extends Component {
         </View>
         <GestureRecognizer
           onSwipeUp={(state) => this.onSwipeUp(state)}
-          config={config}
           style={styles.coin}
           >
           <View style={styles.coin}></View>

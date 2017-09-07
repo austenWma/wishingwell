@@ -35,6 +35,8 @@ class Login extends Component {
     firebaseRef.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
     .then(data => {
       if (data) {
+        this.setState({loading: true})
+
         const uid = data.uid.substring(0, 10)
         this.props.setUserInfo({
           email: data.email,
@@ -46,11 +48,7 @@ class Login extends Component {
           this.props.setBitcoinValue(data)
           Actions.Home()
         })
-        for (let i = 0; i < 100; i ++) {
-            this.setState({
-              progress: this.state.progress + 0.1
-            })
-        }
+        
       }
     })
     .catch((err) => {
@@ -62,8 +60,12 @@ class Login extends Component {
 
 
   render() {
-    console.log('this is teh host IP ', `http://${HOST_IP}:4000/api/getBitcoinValue`)
-    return (
+    
+    return this.state.loading? 
+    <View style={styles.spinnerContainer}>
+      <ActivityIndicator size='large' style={styles.spinner}/> 
+    </View>
+    : (
       <View style={styles.container}>
         <Icon name="currency-usd" size={30} color="#000" />
         <Text style={styles.title}>
@@ -93,13 +95,18 @@ class Login extends Component {
 
         <Button title="Register" onPress={() => Actions.Register()}></Button>
         <Button title="Bypass" onPress={() => Actions.Home()}></Button>
-
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  spinnerContainer: {
+    alignItems: 'center',
+  },
+  spinner: {
+    marginTop: '80%'
+  },
  container: {
    alignItems: 'center',
    marginTop: '20%',

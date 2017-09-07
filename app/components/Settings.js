@@ -98,10 +98,6 @@ class Settings extends Component {
                 task.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
                   var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                   if (progress <= 100) {
-                    this.setState({
-                      uploading: true,
-                      progress
-                    })
                     console.log('Upload is ' + progress + '% done');
                   }
                 }, (err) => {
@@ -109,9 +105,6 @@ class Settings extends Component {
                 }, 
                 () => {
                   this.props.setUserPhoto(task.snapshot.downloadURL)
-                  this.setState({
-                      uploading: false
-                  })
                 })
               })
           })

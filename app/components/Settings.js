@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Button, Image, TextInput,  ImagePickerIOS} from 'react-native';
 import { Form, Separator, InputField, LinkField, SwitchField, PickerField} from 'react-native-form-generator';
 import { connect } from 'react-redux';
 import { setUserInfo } from '../Actions/Profile/ProfileAction'
@@ -11,6 +11,8 @@ import { amazonKey, amazonSecret } from '../../config'
 import ImagePicker from 'react-native-image-picker'
 import RNFetchBlob from 'react-native-fetch-blob'
 import * as Progress from 'react-native-progress'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Actions } from 'react-native-router-flux'
 
 const storage = firebase.storage()
 const Blob = RNFetchBlob.polyfill.Blob
@@ -67,7 +69,7 @@ class Settings extends Component {
       })
     } else {
       this.props.setUserPhoto(this.state.photo)
-    }
+    } 
     firebase.database().ref(`users/${this.props.uid}`).update({
       username: this.state.formData.username || this.props.username,
       firstname: this.state.formData.firstname || this.props.firstname,
@@ -77,6 +79,40 @@ class Settings extends Component {
       photo: this.state.photo || this.props.photo
     })
   }
+  
+  signOut() {
+    firebase.auth().signOut().then(() => {
+      Actions.Login()
+    })
+  }
+
+  handleOnChoose(){
+    ImagePicker.showImagePicker(null, (response) => {
+      console.log('HIHIHIHI')
+      console.log('Response = ', response);
+    
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let source = { uri: response.uri };
+    
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+    
+        this.setState({
+          photo: source
+        });
+      }
+    });
+  }
+  
 
   _pickImage() {
     ImagePicker.showImagePicker(null, (res) => {
@@ -117,14 +153,16 @@ class Settings extends Component {
   render() {
     let { photo } = this.state;
     return this.state.uploading ? (<Progress.Pie size={50} />) : (
+      <KeyboardAwareScrollView>
       <View>
        <View style={styles.body}>
-          <Image source={{ uri: photo || this.props.photo }} onPress={this._pickImage} style={styles.image} />
+          <Image source={{ uri: photo || this.props.photo }} onPress={this.handleOnChoose} style={styles.image} />
         <Button
             title="Change Profile Photo"
-            onPress={this._pickImage}
+            onPress={this.handleOnChoose}
+            style={styles.button}
         />
-       </View>
+        </View>
         <Separator label="Personal Information"/>
        <Form
           style={styles.form}
@@ -162,17 +200,31 @@ class Settings extends Component {
         <InputField
             ref='bio'
             iconLeft={<Icon name='information-outline' size={30} style={styles.icon}/>}
-            placeholder='Bio'
+            placeholder='Add a bio to your profile'
             value={this.props.bio}
           />
         <Separator label="Private Information"/>
+        <LinkField 
+          iconLeft={<Text style={styles.cardtext}>Add Credit Card</Text>}
+          onPress={()=>Actions.AddCard()}
+          iconRight={<Icon name='chevron-right' size={30} style={styles.icon}/>}
+        />
         </Form>
+
         <Button
-          title="Done"
+          title="Save Changes"
           onPress={() => this.handleOnSave()}
+          style={styles.button}
+        ></Button>
+        <Button
+          title="Sign Out"
+          onPress={() => this.signOut()}
+          style={styles.button}
         ></Button>
 
       </View>
+        </KeyboardAwareScrollView>
+
     );
   }
 };
@@ -192,8 +244,16 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginTop: 7,
-    marginLeft: 4,
+    marginLeft: 10,
     color:'gray'
+  },
+  button:{
+    marginTop: 15
+  },
+  cardtext: {
+    fontSize: 18,
+    marginTop: 10,
+    marginLeft: 10
   }
 });
 

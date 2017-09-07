@@ -9,6 +9,8 @@ import com.imagepicker.ImagePickerPackage;
 import com.horcrux.svg.SvgPackage;
 import com.projectseptember.RNGL.RNGLPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import io.realm.react.RealmReactPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -35,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
             new SvgPackage(),
             new RNGLPackage(),
             new VectorIconsPackage()
+            new RealmReactPackage(),
       );
     }
   };

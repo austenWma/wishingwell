@@ -4,8 +4,6 @@ import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import NavigationBar from 'react-native-navbar'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-
-
 const mapStateToProps = (state) => {
   return {
     username: state.ProfileReducer.username,
@@ -17,7 +15,6 @@ const mapStateToProps = (state) => {
     logs: state.SavingsReducer.entries    
   }
 }
-
 const rightButtonConfig = {
   title: 'Settings',
   handler() {
@@ -25,7 +22,6 @@ const rightButtonConfig = {
   },
   tintColor: 'black'
 }
-
 class Profile extends Component {
   constructor(props) {
     super(props)
@@ -40,7 +36,6 @@ class Profile extends Component {
     }
     return total
   }
-
   render() {
     return (
       <View style={styles.body}>
@@ -68,7 +63,6 @@ class Profile extends Component {
     )
   }
 }
-
 const styles = StyleSheet.create({
   about: {
     paddingTop: 15,
@@ -113,8 +107,4 @@ const styles = StyleSheet.create({
 })
 
 export default connect(mapStateToProps)(Profile)
-
-
-
-
 

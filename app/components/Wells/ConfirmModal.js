@@ -34,7 +34,7 @@ class ConfirmModal extends Component {
       <Text>Description: {this.props.description}</Text>
       {this._renderButton('Confirm', () => {
           this.props.setUserInfo({
-            paymentReady: true,
+            paymentReady: true
           })
           this.setState({
             visibleModal: null

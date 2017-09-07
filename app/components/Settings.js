@@ -19,8 +19,6 @@ const Blob = RNFetchBlob.polyfill.Blob
 const fs = RNFetchBlob.fs 
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
 window.Blob = Blob
-
-
 const mapStateToProps = (state) => {
   return {
     username: state.ProfileReducer.username,
@@ -33,8 +31,6 @@ const mapStateToProps = (state) => {
     photo: state.PhotoReducer.photo
   }
 }
-
-
 class Settings extends Component {
   static navigationOptions = {
     title: 'Settings'
@@ -47,12 +43,10 @@ class Settings extends Component {
       uploading: false,
       progress: 0
     }
-
     this.handleOnSave = this.handleOnSave.bind(this)
     this.handleFormChange = this.handleFormChange.bind(this)
     this._pickImage = this._pickImage.bind(this)
   }
-
   componentWillMount() {
    storage.ref(`profile_pics/${this.props.uid}`)
   }
@@ -86,34 +80,6 @@ class Settings extends Component {
     })
   }
 
-  handleOnChoose(){
-    ImagePicker.showImagePicker(null, (response) => {
-      console.log('HIHIHIHI')
-      console.log('Response = ', response);
-    
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      }
-      else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      }
-      else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      }
-      else {
-        let source = { uri: response.uri };
-    
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-    
-        this.setState({
-          photo: source
-        });
-      }
-    });
-  }
-  
-
   _pickImage() {
     ImagePicker.showImagePicker(null, (res) => {
       if (!res.didCancel) {
@@ -122,7 +88,6 @@ class Settings extends Component {
             const uploadUri = uri.replace('file://', '')
               let uploadBlob = null
               const imageRef = storage.ref('profile_pics').child(`${this.props.uid}`)
-
               fs.readFile(uploadUri, 'base64')
               .then((data) => {
                 return Blob.build(data, { type: `${mime};BASE64` })
@@ -130,11 +95,12 @@ class Settings extends Component {
               .then((blob) => {
                 uploadBlob = blob
                 const task = imageRef.put(blob, { contentType: mime })
-
                 task.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
                   var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                   if (progress <= 100) {
-                    console.log('Upload is ' + progress + '% done');
+                    this.setState({
+                      progress
+                    })
                   }
                 }, (err) => {
                   console.log(err)
@@ -149,17 +115,16 @@ class Settings extends Component {
       }
     })
   }
-
   render() {
     let { photo } = this.state;
-    return this.state.uploading ? (<Progress.Pie size={50} />) : (
+    return this.state.uploading ? (<Progress.Bar progress={this.state.progress} width={200} />) : (
       <KeyboardAwareScrollView>
       <View>
        <View style={styles.body}>
           <Image source={{ uri: photo || this.props.photo }} onPress={this.handleOnChoose} style={styles.image} />
         <Button
             title="Change Profile Photo"
-            onPress={this.handleOnChoose}
+            onPress={this._pickImage}
             style={styles.button}
         />
         </View>
@@ -169,22 +134,18 @@ class Settings extends Component {
           ref='personalInformation'
           onChange={this.handleFormChange}
           label="Personal Information" >
-
         <InputField
             ref='username'
             placeholder='Username'
             value={this.props.username}
             iconLeft={<Icon name='account-circle' size={30} style={styles.icon}/>}
           />
-
-
          <InputField
             ref='firstname'
             placeholder='First Name'
             value={this.props.firstname}
             iconLeft={<Icon name='account' size={30} style={styles.icon}/>}
           />
-
         <InputField
             ref='lastname'
             placeholder='Last Name'
@@ -221,14 +182,11 @@ class Settings extends Component {
           onPress={() => this.signOut()}
           style={styles.button}
         ></Button>
-
       </View>
         </KeyboardAwareScrollView>
-
     );
   }
 };
-
 const styles = StyleSheet.create({
   body: {
     top: 20,
@@ -256,5 +214,4 @@ const styles = StyleSheet.create({
     marginLeft: 10
   }
 });
-
 export default connect(mapStateToProps, { setUserInfo, setUserPhoto })(Settings);

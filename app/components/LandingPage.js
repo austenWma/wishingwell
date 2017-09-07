@@ -19,6 +19,7 @@ import { setBitcoinValue } from '../Actions/Bitcoin/BitcoinAction'
 import axios from 'axios'
 import { VictoryLine, VictoryChart, VictoryTheme } from "victory-native"
 import { HOST_IP } from '../../config.js'
+import * as Progress from 'react-native-progress'
 
 const mapStateToProps = (state) => {
   return {
@@ -102,10 +103,12 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <ScrollView >
+      <View>
         <View>
           <NavigationBar title={{title:'My Wishing Well'}} tintColor='#99ccff'/>
         </View>
+
+          <ScrollView>
           <Text>{this.getTotal()}</Text>
 
           <Text style={{fontSize: 40}}>1 Bitcoin = ${this.props.bitcoinValue}</Text>
@@ -124,11 +127,10 @@ class LandingPage extends Component {
               }}
             />
           </VictoryChart>
-
-
-          <Text>This is your well</Text>
-          
-      </ScrollView>
+              <Text>Well</Text>
+            <Progress.Bar progress={0.3} width={200} height={70} style={styles.bar}/>
+          </ScrollView>
+      </View>
     )
   }
 }
@@ -140,6 +142,12 @@ const styles = StyleSheet.create({
   amount: {
     textAlign: 'right',
     marginRight: 15
+  },
+  bar: {
+    transform: [{ rotate: '270deg'}],
+    marginTop: '30%',
+    marginLeft: '23%',
+    marginBottom: '40%'
   }
 })
 

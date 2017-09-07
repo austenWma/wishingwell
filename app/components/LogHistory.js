@@ -6,15 +6,12 @@ import moment from 'moment'
 import { connect } from 'react-redux'
 import { setSavings } from '../Actions/Savings/SavingsAction'
 const db = firebase.database()
-
-
 const mapStateToProps = (state) => {
   return {
     logs: state.SavingsReducer.entries,
     uid: state.ProfileReducer.uid
   }
 }
-
 class LogHistory extends Component {
   constructor() {
     super()
@@ -46,7 +43,6 @@ class LogHistory extends Component {
   }
 
   render() {
-
     return (
       <View>
         <View>
@@ -66,7 +62,6 @@ class LogHistory extends Component {
                 data={this.props.logs.reverse()}
                 renderItem={({item}) =>
                   <View style={styles.list}>
-
                     <View style={styles.firstline}>
                       <Text style={styles.description}>{item.description}</Text>
                       <Text style={styles.time}>{moment(item.time).fromNow()}</Text>
@@ -83,7 +78,6 @@ class LogHistory extends Component {
     )
   }
 }
-
 const styles = StyleSheet.create({
   list: {
     borderBottomWidth: 0.3,
@@ -135,8 +129,7 @@ const styles = StyleSheet.create({
   savings: {
     fontSize: 25,
     marginLeft: 7,
-    fontFamily: ''
-    
+    fontFamily: 'Roboto-Light'
   },
   number: {
     fontSize: 25,
@@ -144,5 +137,4 @@ const styles = StyleSheet.create({
     marginRight: 10    
   },
 })
-
 export default connect(mapStateToProps, { setSavings })(LogHistory)

@@ -133,6 +133,11 @@ android {
 }
 
 dependencies {
+    compile project(':realm')
+    compile project(':react-native-fetch-blob')
+    compile project(':react-native-s3')
+    compile project(':react-native-image-picker')
+    compile project(':react-native-svg')
     compile project(':gl-react-native')
     compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])

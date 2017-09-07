@@ -7,6 +7,17 @@ import { setUserPhoto } from '../Actions/Profile/PhotoAction'
 import NavigationBar from 'react-native-navbar'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import * as firebase from 'firebase'
+import { amazonKey, amazonSecret } from '../../config'
+import ImagePicker from 'react-native-image-picker'
+import RNFetchBlob from 'react-native-fetch-blob'
+import * as Progress from 'react-native-progress'
+
+const storage = firebase.storage()
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs 
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+
 
 const mapStateToProps = (state) => {
   return {
@@ -16,7 +27,8 @@ const mapStateToProps = (state) => {
     email: state.ProfileReducer.email,
     photo: state.PhotoReducer.photo,
     bio: state.ProfileReducer.bio,
-    uid: state.ProfileReducer.uid
+    uid: state.ProfileReducer.uid,
+    photo: state.PhotoReducer.photo
   }
 }
 
@@ -29,16 +41,22 @@ class Settings extends Component {
     super(props)
     this.state={
       photo: null,
-      formData: {}
+      formData: {},
+      uploading: false,
+      progress: 0
     }
 
     this.handleOnSave = this.handleOnSave.bind(this)
     this.handleFormChange = this.handleFormChange.bind(this)
+    this._pickImage = this._pickImage.bind(this)
+  }
+
+  componentWillMount() {
+   storage.ref(`profile_pics/${this.props.uid}`)
   }
 
   handleFormChange(formData){
-    this.state.formData= formData
-
+    this.state.formData = formData
   }
 
   handleOnSave() {
@@ -60,9 +78,52 @@ class Settings extends Component {
     })
   }
 
+  _pickImage() {
+    ImagePicker.showImagePicker(null, (res) => {
+      if (!res.didCancel) {
+        const uploadImage = (uri, mime = 'application/octet-stream') => {
+          return new Promise((resolve, reject) => {
+            const uploadUri = uri.replace('file://', '')
+              let uploadBlob = null
+              const imageRef = storage.ref('profile_pics').child(`${this.props.uid}`)
+
+              fs.readFile(uploadUri, 'base64')
+              .then((data) => {
+                return Blob.build(data, { type: `${mime};BASE64` })
+              })
+              .then((blob) => {
+                uploadBlob = blob
+                const task = imageRef.put(blob, { contentType: mime })
+
+                task.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+                  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  if (progress <= 100) {
+                    this.setState({
+                      uploading: true,
+                      progress
+                    })
+                    console.log('Upload is ' + progress + '% done');
+                  }
+                }, (err) => {
+                  console.log(err)
+                }, 
+                () => {
+                  this.props.setUserPhoto(task.snapshot.downloadURL)
+                  this.setState({
+                      uploading: false
+                  })
+                })
+              })
+          })
+        }
+        uploadImage(res.uri)
+      }
+    })
+  }
+
   render() {
     let { photo } = this.state;
-    return (
+    return this.state.uploading ? (<Progress.Pie size={50} />) : (
       <View>
        <View style={styles.body}>
           <Image source={{ uri: photo || this.props.photo }} onPress={this._pickImage} style={styles.image} />
@@ -121,19 +182,6 @@ class Settings extends Component {
       </View>
     );
   }
-
-  _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      this.setState({ photo: result.uri });
-    }
-  };
 };
 
 const styles = StyleSheet.create({

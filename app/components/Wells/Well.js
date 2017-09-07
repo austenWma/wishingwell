@@ -110,7 +110,7 @@ class Well extends Component {
           <View style={{height: "20%"}}>
             <Text style={styles.credentials}>Input Amount</Text>
           </View>
-          <TextInput style={styles.amountInputField} placeholder="Amount Here" placeholderTextColor={'#A8A8A8'} multiline={true} onChangeText={(text) => this.setState({amount: Number(text)})} value={this.state.amount}/>
+          <TextInput style={styles.amountInputField} placeholder="Amount Here" placeholderTextColor={'#A8A8A8'} multiline={true} onChangeText={(text) => this.setState({amount: Number(text)})} value={String(this.state.amount)}/>
           <View style={{height: "20%"}}>
             <Text style={styles.credentials}>Description</Text>
           </View>

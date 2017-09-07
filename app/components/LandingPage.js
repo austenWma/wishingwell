@@ -17,6 +17,7 @@ import { setUserInfo } from '../Actions/Profile/ProfileAction'
 import { setUserPhoto } from '../Actions/Profile/PhotoAction'
 import { setBitcoinValue } from '../Actions/Bitcoin/BitcoinAction'
 import axios from 'axios'
+import { VictoryLine, VictoryChart, VictoryTheme } from "victory-native"
 import { HOST_IP } from '../../config.js'
 
 const mapStateToProps = (state) => {
@@ -39,7 +40,9 @@ const mapStateToProps = (state) => {
 class LandingPage extends Component {
   constructor(props) {
     super(props)
-
+    this.state = {
+      history: []
+    }
     this.getTotal = this.getTotal.bind(this)
   }
 
@@ -66,6 +69,27 @@ class LandingPage extends Component {
     .then(({ data }) => {
       this.props.setBitcoinValue(data)
     })
+
+    axios.get('https://api.coindesk.com/v1/bpi/historical/close.json')
+    .then(({ data }) => {
+      console.log('bitcoin historical value', data.bpi)
+      let rawData = data.bpi
+      let dates = Object.keys(rawData)
+      let values = Object.values(rawData)
+      
+      let final = []
+      for (let i = 0; i < dates.length; i ++) {
+        let obj = {}
+        let date = dates[i].split('-').join('').slice(6)
+        obj.x = date 
+        obj.y = values[i]
+        final.push(obj)
+      }
+
+      this.setState({
+        history: final
+      })
+    })
   }
 
   getTotal() {
@@ -78,14 +102,33 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <View >
+      <ScrollView >
         <View>
           <NavigationBar title={{title:'My Wishing Well'}} tintColor='#99ccff'/>
         </View>
           <Text>{this.getTotal()}</Text>
 
           <Text style={{fontSize: 40}}>1 Bitcoin = ${this.props.bitcoinValue}</Text>
-      </View>
+          <VictoryChart
+            theme={VictoryTheme.material}
+          >
+            <VictoryLine
+              data={this.state.history}
+              style={{
+                data: { stroke: "#99ccff" },
+                parent: { border: "1px solid #ccc"}
+              }}
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 }
+              }}
+            />
+          </VictoryChart>
+
+
+          <Text>This is your well</Text>
+          
+      </ScrollView>
     )
   }
 }

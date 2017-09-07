@@ -33,7 +33,7 @@ class LogHistory extends Component {
             <ScrollView style={styles.log}>
               <FlatList 
                 removeClippedSubviews={false}
-                data={this.props.logs}
+                data={this.props.logs.reverse()}
                 renderItem={({item}) =>
                   <View style={styles.list}>
                     <Text style={styles.description}>{item.description}</Text>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     color: 'gray'
   },
   log : {
-    marginBottom: '17.5%'
+    marginBottom: '17%'
   }
 })
 

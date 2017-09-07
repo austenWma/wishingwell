@@ -30,6 +30,7 @@ module.exports = {
     });
   },
   getBitcoinValue: (req, res) => {
+    console.log('we in hereereereree')
     let currencyCode = 'USD'
     client.getSpotPrice({'currency': currencyCode}, function(err, price) {
       console.log('Current bitcoin price in ' + currencyCode + ': ' +  price.data.amount);

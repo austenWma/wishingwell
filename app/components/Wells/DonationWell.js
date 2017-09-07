@@ -70,7 +70,7 @@ class DonationWell extends Component {
           cardID: this.props.cardID,
           amount: Number(this.state.amount),
         }
-        axios.post('http://HOST_IP:4000/api/makeDonation', chargeObj)
+        axios.post(`http://${HOST_IP}:4000/api/makeDonation`, chargeObj)
         .then(data => {
           alert('POST MADE')
           console.log(data)
@@ -92,7 +92,7 @@ class DonationWell extends Component {
             //   uid: this.props.uid,
             // }
 
-            // axios.post('http://HOST_IP:4000/api/buyCrypto', buyObj)
+            // axios.post(`http://${HOST_IP}:4000/api/buyCrypto`, buyObj)
           })
         })
       } else {

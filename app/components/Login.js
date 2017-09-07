@@ -41,7 +41,7 @@ class Login extends Component {
           uid: uid,
         })
 
-        axios.get('http://HOST_IP:4000/api/getBitcoinValue')
+        axios.get(`http://${HOST_IP}:4000/api/getBitcoinValue`)
         .then(({ data }) => {
           this.props.setBitcoinValue(data)
           Actions.Home()
@@ -62,6 +62,7 @@ class Login extends Component {
 
 
   render() {
+    console.log('this is teh host IP ', `http://${HOST_IP}:4000/api/getBitcoinValue`)
     return (
       <View style={styles.container}>
         <Icon name="currency-usd" size={30} color="#000" />

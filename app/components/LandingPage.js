@@ -65,7 +65,7 @@ class LandingPage extends Component {
       this.props.setUserPhoto(photo)
     })
 
-    axios.get('http://HOST_IP:80/api/getBitcoinValue')
+    axios.get(`http://${HOST_IP}:80/api/getBitcoinValue`)
     .then(({ data }) => {
       this.props.setBitcoinValue(data)
     })
